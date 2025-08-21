@@ -3,6 +3,7 @@ package com.poc.grpc.user;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
+import net.devh.boot.grpc.server.config.GrpcServerBuilderConfigurer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -108,9 +109,11 @@ public class UserServiceApplication {
   @Bean
   public GrpcServerBuilderConfigurer grpcServerBuilderConfigurer() {
     return serverBuilder -> {
-      if (serverBuilder instanceof io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder) {
+      if (serverBuilder.getClass().getName().equals("io.grpc.netty.NettyServerBuilder")) {
         int processorCount = Runtime.getRuntime().availableProcessors();
-        ((io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder) serverBuilder)
+        io.grpc.netty.NettyServerBuilder nettyBuilder =
+            (io.grpc.netty.NettyServerBuilder) serverBuilder;
+        nettyBuilder
             .executor(Executors.newFixedThreadPool(processorCount * 2))
             .maxConcurrentCallsPerConnection(50)
             .keepAliveTime(30, java.util.concurrent.TimeUnit.SECONDS);

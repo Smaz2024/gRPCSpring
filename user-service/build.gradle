@@ -5,8 +5,11 @@ plugins {
 description = 'User Service - Handles user registration, authentication, and profile management'
 
 dependencies {
-    implementation "io.grpc:grpc-netty:1.60.0"
+    // gRPC dependencies
+    implementation "io.grpc:grpc-netty"
     implementation "io.micrometer:micrometer-registry-prometheus"
+
+    // Spring Boot starters
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-data-jpa"
     implementation "org.springframework.boot:spring-boot-starter-security"
@@ -24,10 +27,10 @@ dependencies {
     implementation "net.devh:grpc-server-spring-boot-starter"
     implementation "net.devh:grpc-client-spring-boot-starter"
 
-    // JWT (already managed)
-    implementation "io.jsonwebtoken:jjwt-api:${jwtVersion}"
-    runtimeOnly "io.jsonwebtoken:jjwt-impl:${jwtVersion}"
-    runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jwtVersion}"
+    // JWT (using dependency management for versions)
+    implementation "io.jsonwebtoken:jjwt-api"
+    runtimeOnly "io.jsonwebtoken:jjwt-impl"
+    runtimeOnly "io.jsonwebtoken:jjwt-jackson"
 
     // Project shared code
     implementation project(':grpc-common')
@@ -42,9 +45,9 @@ dependencies {
     testImplementation 'com.icegreen:greenmail-junit5:2.0.1' // for email unit tests
     testImplementation 'org.testcontainers:postgresql'
 
-    // Lombok for annotations like @Slf4j, @RequiredArgsConstructor, @Builder, etc.
-    implementation "org.projectlombok:lombok:${lombokVersion}"
-    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    // Lombok
+    implementation "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
 
     // Resilience4j for circuit breaker, retry, timelimiter annotations
     implementation "io.github.resilience4j:resilience4j-circuitbreaker:2.2.0"

@@ -5,14 +5,14 @@ import com.poc.grpc.common.security.enums.SecurityLevel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
 /**
  * Order service specific security configuration. Focuses only on order-service-specific security
  * needs while leveraging auto-configuration from the common module.
  */
 @Slf4j
-@EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 @Configuration
 /**
  * Security configuration for Order Service.
