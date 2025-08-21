@@ -21,7 +21,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -44,7 +43,6 @@ import org.springframework.web.client.RestTemplate;
  */
 @Slf4j
 @Configuration
-@EnableJpaAuditing // Enables automatic population of fields like @CreatedDate and @LastModifiedDate
 @EnableAsync // Enables support for asynchronous method execution with @Async
 @Import({DatabaseConfig.class, SecurityConfig.class, RedisConfig.class, GrpcClientConfig.class})
 public class AppConfig {
@@ -323,5 +321,10 @@ public class AppConfig {
     public Object getEventData() {
       return eventData;
     }
+  }
+
+  @Bean
+  public ServerInterceptor grpcServerAuthInterceptor(JwtUtil jwtUtil) {
+    return new GrpcServerAuthInterceptor(jwtUtil);
   }
 }
