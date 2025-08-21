@@ -13,9 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * Configures essential beans for the User Service.
+ * Centralized configuration for User Service.
  *
- * <p>This class provides configuration for security, resilience, and auditing.
+ * <p>Uses constructor injection and extracts constants for maintainability.
  */
 @Slf4j
 @Configuration
@@ -70,4 +70,15 @@ public class UserServiceConfig {
     log.debug("Configuring JPA auditor provider");
     return () -> Optional.of("system");
   }
+}
+
+/** Extracted constants for User Service. */
+final class UserConstants {
+  private UserConstants() {}
+
+  public static final String DEFAULT_ROLE = "ROLE_USER";
+  public static final int PASSWORD_MIN_LENGTH = 8;
+  public static final int PASSWORD_MAX_LENGTH = 100;
+  public static final String USERNAME_PATTERN = "^[a-zA-Z0-9._-]{3,50}$";
+  public static final int MAX_FAILED_ATTEMPTS = 5;
 }

@@ -1,11 +1,16 @@
 package com.poc.grpc.user;
 
 import java.util.Map;
+import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 
 /**
  * User Service Application
@@ -84,5 +89,32 @@ public class UserServiceApplication {
     } catch (Exception e) {
       log.error("Error while logging gRPC services", e);
     }
+  }
+
+  @Bean
+  public ApplicationListener<ApplicationStartedEvent> startupListener() {
+    return event -> {
+      log.info("User service started successfully");
+    };
+  }
+
+  @Bean
+  public ApplicationListener<ApplicationReadyEvent> readyListener() {
+    return event -> {
+      log.info("User service is ready to accept requests");
+    };
+  }
+
+  @Bean
+  public GrpcServerBuilderConfigurer grpcServerBuilderConfigurer() {
+    return serverBuilder -> {
+      if (serverBuilder instanceof io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder) {
+        int processorCount = Runtime.getRuntime().availableProcessors();
+        ((io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder) serverBuilder)
+            .executor(Executors.newFixedThreadPool(processorCount * 2))
+            .maxConcurrentCallsPerConnection(50)
+            .keepAliveTime(30, java.util.concurrent.TimeUnit.SECONDS);
+      }
+    };
   }
 }

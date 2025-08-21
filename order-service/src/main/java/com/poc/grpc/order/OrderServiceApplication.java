@@ -1,10 +1,17 @@
 package com.poc.grpc.order;
 
+import io.grpc.netty.NettyServerBuilder;
 import java.util.Map;
+import java.util.concurrent.Executors;
 import lombok.extern.slf4j.Slf4j;
+import net.devh.boot.grpc.server.serverbuilder.GrpcServerBuilderConfigurer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 
 /**
  * Order Service Application
@@ -82,5 +89,31 @@ public class OrderServiceApplication {
     } catch (Exception e) {
       log.error("Error while logging gRPC services", e);
     }
+  }
+
+  @Bean
+  public ApplicationListener<ApplicationStartedEvent> startupListener() {
+    return event -> {
+      log.info("Order service started successfully");
+    };
+  }
+
+  @Bean
+  public ApplicationListener<ApplicationReadyEvent> readyListener() {
+    return event -> {
+      log.info("Order service is ready to accept requests");
+    };
+  }
+
+  @Bean
+  public GrpcServerBuilderConfigurer grpcServerBuilderConfigurer() {
+    return serverBuilder -> {
+      if (serverBuilder instanceof NettyServerBuilder) {
+        ((NettyServerBuilder) serverBuilder)
+            .executor(Executors.newFixedThreadPool(10))
+            .maxConcurrentCallsPerConnection(100)
+            .maxInboundMessageSize(4 * 1024 * 1024);
+      }
+    };
   }
 }

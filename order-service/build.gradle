@@ -5,6 +5,8 @@ plugins {
 description = 'Order Service - Handles order creation, processing, and saga orchestration'
 
 dependencies {
+    implementation "io.grpc:grpc-netty:1.60.0"
+    implementation "io.micrometer:micrometer-registry-prometheus"
     implementation "io.jsonwebtoken:jjwt-api:${jwtVersion}"
     runtimeOnly "io.jsonwebtoken:jjwt-impl:${jwtVersion}"
     runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jwtVersion}"
