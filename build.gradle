@@ -48,8 +48,8 @@ subprojects {
             mavenBom "io.grpc:grpc-bom:${grpcVersion}"
         }
         dependencies {
-            dependency "net.devh:grpc-server-spring-boot-starter:3.0.0"
-            dependency "net.devh:grpc-client-spring-boot-starter:3.0.0"
+            dependency "net.devh:grpc-server-spring-boot-starter:2.15.0.RELEASE"
+            dependency "net.devh:grpc-client-spring-boot-starter:2.15.0.RELEASE"
             dependency "io.jsonwebtoken:jjwt-api:${jwtVersion}"
             dependency "io.jsonwebtoken:jjwt-impl:${jwtVersion}"
             dependency "io.jsonwebtoken:jjwt-jackson:${jwtVersion}"

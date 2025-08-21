@@ -2,8 +2,6 @@ package com.poc.grpc.common.exception;
 
 import io.grpc.Status;
 import lombok.extern.slf4j.Slf4j;
-import net.devh.boot.grpc.server.advice.GrpcAdvice;
-import net.devh.boot.grpc.server.advice.GrpcExceptionHandler;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 
@@ -25,7 +23,6 @@ import org.springframework.security.core.AuthenticationException;
  * - Provides meaningful error messages
  */
 @Slf4j
-@GrpcAdvice
 public class GlobalGrpcExceptionHandler {
 
   /**
@@ -34,7 +31,6 @@ public class GlobalGrpcExceptionHandler {
    * @param e The exception to handle
    * @return gRPC Status with error details
    */
-  @GrpcExceptionHandler(EntityNotFoundException.class)
   public Status handleEntityNotFound(EntityNotFoundException e) {
     log.warn("Entity not found: {}", e.getMessage());
     return Status.NOT_FOUND.withDescription(e.getMessage()).withCause(e);
@@ -46,7 +42,6 @@ public class GlobalGrpcExceptionHandler {
    * @param e The exception to handle
    * @return gRPC Status with error details
    */
-  @GrpcExceptionHandler(AuthenticationException.class)
   public Status handleAuthentication(AuthenticationException e) {
     log.warn("Authentication failed: {}", e.getMessage());
     return Status.UNAUTHENTICATED.withDescription("Authentication failed").withCause(e);
@@ -58,7 +53,6 @@ public class GlobalGrpcExceptionHandler {
    * @param e The exception to handle
    * @return gRPC Status with error details
    */
-  @GrpcExceptionHandler(AccessDeniedException.class)
   public Status handleAccessDenied(AccessDeniedException e) {
     log.warn("Access denied: {}", e.getMessage());
     return Status.PERMISSION_DENIED.withDescription("Access denied").withCause(e);
@@ -70,7 +64,6 @@ public class GlobalGrpcExceptionHandler {
    * @param e The exception to handle
    * @return gRPC Status with error details
    */
-  @GrpcExceptionHandler(JwtGenerationException.class)
   public Status handleJwtGeneration(JwtGenerationException e) {
     log.error("JWT generation failed: {}", e.getMessage(), e);
     return Status.INTERNAL.withDescription("Failed to generate authentication token").withCause(e);
@@ -82,7 +75,6 @@ public class GlobalGrpcExceptionHandler {
    * @param e The exception to handle
    * @return gRPC Status with error details
    */
-  @GrpcExceptionHandler(JwtValidationException.class)
   public Status handleJwtValidation(JwtValidationException e) {
     log.warn("JWT validation failed: {}", e.getMessage());
     return Status.UNAUTHENTICATED.withDescription("Invalid authentication token").withCause(e);
@@ -94,7 +86,6 @@ public class GlobalGrpcExceptionHandler {
    * @param e The exception to handle
    * @return gRPC Status with error details
    */
-  @GrpcExceptionHandler(IllegalArgumentException.class)
   public Status handleIllegalArgument(IllegalArgumentException e) {
     log.warn("Invalid argument: {}", e.getMessage());
     return Status.INVALID_ARGUMENT.withDescription(e.getMessage()).withCause(e);
@@ -106,7 +97,6 @@ public class GlobalGrpcExceptionHandler {
    * @param e The exception to handle
    * @return gRPC Status with error details
    */
-  @GrpcExceptionHandler(Exception.class)
   public Status handleGeneric(Exception e) {
     log.error("Unexpected error in gRPC service: {}", e.getMessage(), e);
     return Status.INTERNAL.withDescription("Internal server error").withCause(e);

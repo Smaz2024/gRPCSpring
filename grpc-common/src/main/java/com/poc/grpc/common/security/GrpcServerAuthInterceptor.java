@@ -3,7 +3,6 @@ package com.poc.grpc.common.security;
 import io.grpc.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.devh.boot.grpc.server.interceptor.GrpcGlobalServerInterceptor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -26,8 +25,6 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@GrpcGlobalServerInterceptor // Marks this as a global interceptor to be applied to all gRPC
-// services.
 @RequiredArgsConstructor
 public class GrpcServerAuthInterceptor implements ServerInterceptor {
 
